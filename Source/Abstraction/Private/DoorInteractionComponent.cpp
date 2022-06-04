@@ -6,8 +6,11 @@
 #include "GameFrameWork/PlayerController.h"
 #include "Engine/TriggerBox.h"
 #include "Engine/World.h"
+#include "ObjectiveComponent.h"
 
 #include "DrawDebugHelpers.h"
+#include "ObjectiveWorldSubSystem.h"
+
 
 constexpr float FLT_METERS(float meters) { return meters * 100.0f; }
 
@@ -35,7 +38,6 @@ void UDoorInteractionComponent::BeginPlay()
 	FinalRotation = GetOwner()->GetActorRotation() + DesiredRotation;
 
 	CurrentRotationTime = 0.0f;
-
 	// ...
 	
 }
@@ -69,13 +71,28 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 			if (TimeRatio >= 1.0f)
 			{
-				DoorState = EDoorState::DS_Open;
-				GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
-				OpenedEvent.Broadcast();
+				OnDoorOpen();
 			}
 	}
 
 	DebugDraw();
+}
+
+void UDoorInteractionComponent::OnDoorOpen()
+{
+	DoorState = EDoorState::DS_Open;
+	UObjectiveComponent* ObjectiveComponent = GetOwner()->FindComponentByClass<UObjectiveComponent>();
+	if (ObjectiveComponent)
+	{
+		ObjectiveComponent->SetState(EObjectiveState::OS_Completed);
+	}
+
+	//hide prompt
+	//disable interaction
+
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
+	//tell any listeners that the interaction is successful
+	//InteractionSuccess.Broadcast();
 }
 
 void UDoorInteractionComponent::OnDebugToggled(IConsoleVariable* Var)

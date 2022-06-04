@@ -31,6 +31,8 @@ public:
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void OnDoorOpen();
+
 	DECLARE_EVENT(FDoorInteractionComponent, FOpened)
 	FOpened& OnOpened() { return OpenedEvent; }
 
