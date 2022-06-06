@@ -40,7 +40,7 @@ public:
 	void SetState(EObjectiveState NewState);
 protected:
 
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UPROPERTY(EditAnywhere)

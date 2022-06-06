@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "Subsystems/WorldSubsystem.h"
+#include "SubSystems/WorldSubSystem.h"
 #include "Blueprint/UserWidget.h"
+#include "ObjectiveComponent.h"
 #include "ObjectiveWorldSubSystem.generated.h"
+
 
 
 UCLASS()

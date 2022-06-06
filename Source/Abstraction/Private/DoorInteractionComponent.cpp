@@ -6,10 +6,8 @@
 #include "GameFrameWork/PlayerController.h"
 #include "Engine/TriggerBox.h"
 #include "Engine/World.h"
-#include "ObjectiveComponent.h"
-
 #include "DrawDebugHelpers.h"
-#include "ObjectiveWorldSubSystem.h"
+#include "ObjectiveComponent.h"
 
 
 constexpr float FLT_METERS(float meters) { return meters * 100.0f; }
