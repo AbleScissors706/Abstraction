@@ -12,7 +12,10 @@ AFireDamageActor::AFireDamageActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	DealDamageComponent = CreateDefaultSubobject<UDealDamageComponent>(TEXT("Deal Damage"));
-
+	if (DealDamageComponent->GetTriggerCapsule())
+	{
+		RootComponent = DealDamageComponent->GetTriggerCapsule();
+	}
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle System"));
 	ParticleSystemComponent->SetupAttachment(RootComponent);
 
