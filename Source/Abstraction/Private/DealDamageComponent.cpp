@@ -29,7 +29,7 @@ void UDealDamageComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 {
 	UE_LOG(LogTemp, Warning, TEXT("UDealDamageComponent::OnOverlapBegin"));
 
-	if (!bActive)
+	if (!bEnabled)
 	{
 		return;
 	}

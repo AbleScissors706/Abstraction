@@ -7,7 +7,8 @@
 #include "HealthComponent.h"
 
 // Sets default values
-AAbstractionPlayerCharacter::AAbstractionPlayerCharacter()
+AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer)
+	:Super(ObjectInitializer)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,6 +34,10 @@ void AAbstractionPlayerCharacter::Tick(float DeltaTime)
 void AAbstractionPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	FInputActionBinding* Binding;
+
+	Binding = &PlayerInputComponent->BindAction(FName("InteractionStart"), IE_Pressed, this, &AAbstractionPlayerCharacter::InteractionStartRequested);
+	Binding = &PlayerInputComponent->BindAction(FName("InteractionCancel"), IE_Pressed, this, &AAbstractionPlayerCharacter::InteractionCancelRequested);
 
 }
 
@@ -63,4 +68,14 @@ void AAbstractionPlayerCharacter::OnDeath(bool IsFellOut)
 	{
 		PlayerController->RestartLevel();
 	}
+}
+
+void AAbstractionPlayerCharacter::InteractionStartRequested()
+{
+	OnInteractionStartRequested.Broadcast();
+}
+
+void AAbstractionPlayerCharacter::InteractionCancelRequested()
+{
+	OnInteractionCancelRequested.Broadcast();
 }

@@ -41,28 +41,13 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 		GetOwner()->SetActorRotation(CurrentRotation);
 		if (TimeRatio >= 1.0f)
 		{
-			OnDoorOpen();
+			DoorOpen();
 		}
 	}
 
 	DebugDraw();
 }
 
-void UDoorInteractionComponent::OpenDoor()
-{
-	if (IsOpen() || DoorState == EDoorState::DS_Opening)
-	{
-		return;
-	}
-
-	if (AudioComponent)
-	{
-		AudioComponent->Play();
-	}
-
-	DoorState = EDoorState::DS_Opening;
-	CurrentRotationTime = 0.0f;
-}
 
 void UDoorInteractionComponent::BeginPlay()
 {
@@ -72,76 +57,81 @@ void UDoorInteractionComponent::BeginPlay()
 	//ensure TimeToRotate is greater than EPSILON
 	CurrentRotationTime = 0.0f;
 
-	AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
-	//check(AudioComponent);
-	if (!AudioComponent)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
-	}
+	//AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
+	////check(AudioComponent);
+	//if (!AudioComponent)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
+	//}
 
-	TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
+	//TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
 }
 
-void UDoorInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::OnOverlapBegin"));
-	//we already have somebody interacting, currently we don't support multiple interactions
-	if (InteractingActor || !bActive)
-	{
-		return;
-	}
 
-	//for now we will get that component and set visible
-	if (OtherActor->ActorHasTag("Player"))
-	{
-		InteractingActor = OtherActor;
-		if (TextRenderComponent)
-		{
-			TextRenderComponent->SetText(InteractionPrompt);
-			TextRenderComponent->SetVisibility(true);
-		}
-	}
-}
+//void UDoorInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::OnOverlapBegin"));
+//	//we already have somebody interacting, currently we don't support multiple interactions
+//	if (InteractingActor || !bActive)
+//	{
+//		return;
+//	}
+//
+//	//for now we will get that component and set visible
+//	if (OtherActor->ActorHasTag("Player"))
+//	{
+//		InteractingActor = OtherActor;
+//		if (TextRenderComponent)
+//		{
+//			TextRenderComponent->SetText(InteractionPrompt);
+//			TextRenderComponent->SetVisibility(true);
+//		}
+//	}
+//}
+//
+//void UDoorInteractionComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::OnOverlapEnd"));
+//	if (OtherActor == InteractingActor)
+//	{
+//		InteractingActor = nullptr;
+//		if (TextRenderComponent)
+//		{
+//			TextRenderComponent->SetVisibility(false);
+//		}
+//	}
+//}
 
-void UDoorInteractionComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void UDoorInteractionComponent::InteractionStart()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::OnOverlapEnd"));
-	if (OtherActor == InteractingActor)
-	{
-		InteractingActor = nullptr;
-		if (TextRenderComponent)
-		{
-			TextRenderComponent->SetVisibility(false);
-		}
-	}
-}
-
-void UDoorInteractionComponent::InteractionRequested()
-{
-	//ideally we would make sure this is allowed
 	if (InteractingActor)
 	{
-		bActive = false;
-		if (TextRenderComponent)
-		{
-			TextRenderComponent->SetText(InteractionPrompt);
-			TextRenderComponent->SetVisibility(false);
-		}
-
-		AAbstractionPlayerCharacter* APC = Cast<AAbstractionPlayerCharacter>(InteractingActor);
-		if (APC)
-		{
-			APC->DoorOpenInteractionStarted(GetOwner());
-		}
-
-		//this will be called from the owner to be in sync with animation
-		//OpenDoor();
+		DoorOpen();
 	}
+	////ideally we would make sure this is allowed
+	///*if (InteractingActor)
+	//{
+	//	bActive = false;
+	//	if (TextRenderComponent)
+	//	{
+	//		TextRenderComponent->SetText(InteractionPrompt);
+	//		TextRenderComponent->SetVisibility(false);
+	//	}
+
+	//	AAbstractionPlayerCharacter* APC = Cast<AAbstractionPlayerCharacter>(InteractingActor);
+	//	if (APC)
+	//	{
+	//		APC->DoorOpenInteractionStarted(GetOwner());
+	//	}*/
+
+	//	//this will be called from the owner to be in sync with animation
+	//	//OpenDoor();
+	//}
 }
 
 
 
-void UDoorInteractionComponent::OnDoorOpen()
+void UDoorInteractionComponent::DoorOpen()
 {
 	DoorState = EDoorState::DS_Open;
 	UObjectiveComponent* ObjectiveComponent = GetOwner()->FindComponentByClass<UObjectiveComponent>();

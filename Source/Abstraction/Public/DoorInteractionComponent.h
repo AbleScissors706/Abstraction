@@ -22,7 +22,6 @@ enum class EDoorState
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-
 class ABSTRACTION_API UDoorInteractionComponent : public UInteractionComponent
 {
 	GENERATED_BODY()
@@ -34,23 +33,23 @@ public:
 
 	//request to open the door
 	UFUNCTION(BlueprintCallable)
-		void OpenDoor();
+	void DoorOpen();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	//UInteractionComponent
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
-	void InteractionRequested() override;
+	/*void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;*/
 
-	//called internally when door has finished opening
-	void OnDoorOpen();
+	void InteractionStart();
 
 	UFUNCTION(BlueprintCallable)
 	bool IsOpen() { return DoorState == EDoorState::DS_Open; }
 
 	void DebugDraw();
+
 	static void OnDebugToggled(IConsoleVariable* Var);
 
 	UPROPERTY(EditAnywhere)

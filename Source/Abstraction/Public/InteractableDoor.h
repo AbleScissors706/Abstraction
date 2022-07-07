@@ -11,7 +11,7 @@ class UDoorInteractionComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDoorOpen);
 
-UCLASS()
+UCLASS(BlueprintType)
 class ABSTRACTION_API AInteractableDoor : public AStaticMeshActor
 {
 	GENERATED_BODY()
