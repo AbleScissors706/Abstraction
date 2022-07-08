@@ -31,19 +31,19 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION()
-		virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {};
+	virtual void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {};
 
 	UFUNCTION()
-		virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {};
+	virtual void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) {};
 
 	UFUNCTION(BlueprintCallable)
-		virtual void InteractionRequested() {};
+	virtual void InteractionRequested() {};
 
 	UPROPERTY(EditAnywhere)
-		FText InteractionPrompt;
+	FText InteractionPrompt;
 
 	UPROPERTY(EditAnywhere, NoClear)
-		UCapsuleComponent* TriggerCapsule = nullptr;
+	UCapsuleComponent* TriggerCapsule = nullptr;
 
 	AActor* InteractingActor = nullptr;
 	bool bActive = true;

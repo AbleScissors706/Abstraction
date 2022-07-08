@@ -1,27 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "ObjectiveWorldSubSystem.h"
+#include "ObjectiveWorldSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "ObjectiveComponent.h"
+#include "../AbstractionGameModeBase.h"
+#include "Blueprint/UserWidget.h"
+#include "ObjectiveHud.h"
 
-void UObjectiveWorldSubSystem::CreateObjectiveWidget(TSubclassOf<UUserWidget> ObjectiveWidgetClass)
-{
-	if (ObjectiveWidget == nullptr)
-	{
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		ObjectiveWidget = CreateWidget<UUserWidget>(PlayerController, ObjectiveWidgetClass);
-	}
-
-}
-
-void UObjectiveWorldSubSystem::DisplayObjectiveWidget()
-{
-	ensureMsgf(ObjectiveWidget, TEXT("UObjectiveWorldSubSystem::DisplayObjectiveWidget ObjectiveWidget is nullptr"));
-	ObjectiveWidget->AddToViewport();
-}
-
-FString UObjectiveWorldSubSystem::GetCurrentObjectiveDescription()
+FString UObjectiveWorldSubsystem::GetCurrentObjectiveDescription()
 {
 	if (!Objectives.IsValidIndex(0) || Objectives[0]->GetState() == EObjectiveState::OS_Inactive)
 	{
@@ -37,7 +20,7 @@ FString UObjectiveWorldSubSystem::GetCurrentObjectiveDescription()
 	return RetObjective;
 }
 
-void UObjectiveWorldSubSystem::AddObjective(UObjectiveComponent* ObjectiveComponent)
+void UObjectiveWorldSubsystem::AddObjective(UObjectiveComponent* ObjectiveComponent)
 {
 	check(ObjectiveComponent);
 
@@ -45,16 +28,119 @@ void UObjectiveWorldSubSystem::AddObjective(UObjectiveComponent* ObjectiveCompon
 	Objectives.AddUnique(ObjectiveComponent);
 	if (Objectives.Num() > PrevSize)
 	{
-		ObjectiveComponent->OnStateChanged().AddUObject(this, &UObjectiveWorldSubSystem::OnObjectiveStateChanged);
+		ObjectiveComponent->OnStateChanged.AddUObject(this, &UObjectiveWorldSubsystem::OnObjectiveStateChanged);
 	}
 }
 
-void UObjectiveWorldSubSystem::RemoveObjective(UObjectiveComponent* ObjectiveComponent)
+void UObjectiveWorldSubsystem::RemoveObjective(UObjectiveComponent* ObjectiveComponent)
 {
+	int32 numRemoved = ObjectiveComponent->OnStateChanged.RemoveAll(this);
+	check(numRemoved);
 	Objectives.Remove(ObjectiveComponent);
 }
 
-void UObjectiveWorldSubSystem::OnObjectiveStateChanged(UObjectiveComponent* ObjectiveComponent, EObjectiveState  ObjectiveState)
+void UObjectiveWorldSubsystem::OnMapStart()
 {
-	DisplayObjectiveWidget();
+	AAbstractionGameModeBase* GameMode = Cast<AAbstractionGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+	{
+		CreateObjectiveWidgets();
+		DisplayObjectiveWidget();
+	}
+}
+
+void UObjectiveWorldSubsystem::Deinitialize()
+{
+	Super::Deinitialize();
+
+	ObjectiveWidget = nullptr;
+	ObjectivesCompleteWidget = nullptr;
+}
+
+void UObjectiveWorldSubsystem::CreateObjectiveWidgets()
+{
+	if (ObjectiveWidget == nullptr)
+	{
+		AAbstractionGameModeBase* GameMode = Cast<AAbstractionGameModeBase>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			ObjectiveWidget = CreateWidget<UObjectiveHud>(PlayerController, GameMode->ObjectiveWidgetClass);
+			ObjectivesCompleteWidget = CreateWidget<UUserWidget>(PlayerController, GameMode->ObjectivesCompleteWidgetClass);
+		}
+	}
+}
+
+void UObjectiveWorldSubsystem::DisplayObjectiveWidget()
+{
+	if (ObjectiveWidget)
+	{
+		if (!ObjectiveWidget->IsInViewport())
+		{
+			ObjectiveWidget->AddToViewport();
+		}
+
+		ObjectiveWidget->UpdateObjectiveText(GetCompletedObjectiveCount(), Objectives.Num());
+	}
+}
+
+void UObjectiveWorldSubsystem::RemoveObjectiveWidget()
+{
+	if (ObjectiveWidget)
+	{
+		ObjectiveWidget->RemoveFromViewport();
+	}
+}
+
+void UObjectiveWorldSubsystem::DisplayObjectivesCompleteWidget()
+{
+	if (ObjectivesCompleteWidget)
+	{
+		ObjectivesCompleteWidget->AddToViewport();
+	}
+}
+
+void UObjectiveWorldSubsystem::RemoveObjectivesCompleteWidget()
+{
+	if (ObjectivesCompleteWidget)
+	{
+		ObjectivesCompleteWidget->RemoveFromViewport();
+	}
+}
+
+uint32 UObjectiveWorldSubsystem::GetCompletedObjectiveCount()
+{
+	uint32 ObjectivedCompleted = 0u;
+	for (const UObjectiveComponent* OC : Objectives)
+	{
+		if (OC && OC->GetState() == EObjectiveState::OS_Completed)
+		{
+			++ObjectivedCompleted;
+		}
+	}
+
+	return ObjectivedCompleted;
+}
+
+
+void UObjectiveWorldSubsystem::OnObjectiveStateChanged(const UObjectiveComponent* ObjectiveComponent, EObjectiveState ObjectiveState)
+{
+	if (Objectives.Num() == 0 || !Objectives.Contains(ObjectiveComponent))
+	{
+		return;
+	}
+
+	//check if game is over... 
+	if (ObjectiveWidget && ObjectivesCompleteWidget)
+	{
+		if ((ObjectiveState == EObjectiveState::OS_Completed) && GetCompletedObjectiveCount() == Objectives.Num())
+		{
+			//GameOver
+			DisplayObjectivesCompleteWidget();
+		}
+		/*else
+		{*/
+		DisplayObjectiveWidget();
+		/*}*/
+	}
 }

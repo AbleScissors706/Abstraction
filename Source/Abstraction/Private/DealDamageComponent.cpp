@@ -1,11 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "DealDamageComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "AbstractionPlayerCharacter.h"
-#include "GameFramework/DamageType.h"
-#include "Particles/ParticleSystemComponent.h"
-
 
 // Sets default values for this component's properties
 UDealDamageComponent::UDealDamageComponent()
@@ -29,12 +24,12 @@ void UDealDamageComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 {
 	UE_LOG(LogTemp, Warning, TEXT("UDealDamageComponent::OnOverlapBegin"));
 
-	if (!bEnabled)
+	if (OtherActor == GetOwner())
 	{
 		return;
 	}
 
-	if (OtherActor == GetOwner())
+	if (!IsActive())
 	{
 		return;
 	}
@@ -42,10 +37,7 @@ void UDealDamageComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 	AAbstractionPlayerCharacter* PlayerCharacter = Cast<AAbstractionPlayerCharacter>(OtherActor);
 	if (PlayerCharacter)
 	{
-		TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-		FDamageEvent DamageEvent(ValidDamageTypeClass);
-
-		PlayerCharacter->TakeDamage(BaseDamage, DamageEvent, nullptr, GetOwner());
+		PlayerCharacter->SetOnFire(BaseDamage, DamageTotalTime, TakeDamageInterval);
 	}
 }
 

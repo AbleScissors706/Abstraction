@@ -24,7 +24,7 @@ void AInteractableDoor::BeginPlay()
 
 void AInteractableDoor::OpenDoor()
 {
-	DoorInteractionComponent->DoorOpen();
+	DoorInteractionComponent->OnDoorOpen();
 }
 
 void AInteractableDoor::OnInteractionSuccess()

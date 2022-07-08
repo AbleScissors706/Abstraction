@@ -1,26 +1,30 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AbstractionPlayerCharacter.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Components/InputComponent.h"
+#include "DamageHandlerComponent.h"
 
 // Sets default values
 AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer)
-	:Super(ObjectInitializer)
+	//: Super(ObjectInitializer)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	DamageHandlerComponent = CreateDefaultSubobject<UDamageHandlerComponent>(TEXT("DamageHandlerComponent"));
+	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+	ParticleSystemComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AAbstractionPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//use possess/unpossess
+	PC = GetWorld()->GetFirstPlayerController();
 }
 
 // Called every frame
@@ -35,10 +39,10 @@ void AAbstractionPlayerCharacter::SetupPlayerInputComponent(UInputComponent* Pla
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	FInputActionBinding* Binding;
-
+	//these functions fire off events
+	//interaction component listens to them
 	Binding = &PlayerInputComponent->BindAction(FName("InteractionStart"), IE_Pressed, this, &AAbstractionPlayerCharacter::InteractionStartRequested);
 	Binding = &PlayerInputComponent->BindAction(FName("InteractionCancel"), IE_Pressed, this, &AAbstractionPlayerCharacter::InteractionCancelRequested);
-
 }
 
 void  AAbstractionPlayerCharacter::FellOutOfWorld(const UDamageType& dmgType)
@@ -61,6 +65,14 @@ float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent c
 	return Damage;
 }
 
+void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
+{
+	if (DamageHandlerComponent)
+	{
+		DamageHandlerComponent->TakeFireDamage(BaseDamage, DamageTotalTime, TakeDamageInterval);
+	}
+}
+
 void AAbstractionPlayerCharacter::OnDeath(bool IsFellOut)
 {
 	APlayerController* PlayerController = GetController<APlayerController>();
@@ -78,4 +90,15 @@ void AAbstractionPlayerCharacter::InteractionStartRequested()
 void AAbstractionPlayerCharacter::InteractionCancelRequested()
 {
 	OnInteractionCancelRequested.Broadcast();
+}
+
+void AAbstractionPlayerCharacter::HandleItemCollected()
+{
+	ItemsCollected++;
+	// Play Effects here.
+	//PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
+	PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
+		EDynamicForceFeedbackAction::Start);
+
+	ItemCollected();
 }

@@ -1,11 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "DealDamageComponent.generated.h"
 
+//forward delcare classes that we use
 class UCapsuleComponent;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -14,6 +13,7 @@ class ABSTRACTION_API UDealDamageComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+	// Sets default values for this component's properties
 	UDealDamageComponent();
 
 	UFUNCTION()
@@ -21,11 +21,11 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
+
 	UCapsuleComponent* GetTriggerCapsule() const { return TriggerCapsule; }
 
-	bool IsEnabled() const { return bEnabled; }
-	void SetEnabled(bool value) { bEnabled = value; }
+	bool IsActive() const { return bActive; }
+	void SetActive(bool IsActive) { bActive = IsActive; }
 
 protected:
 	// Called when the game starts
@@ -45,5 +45,5 @@ protected:
 	UPROPERTY(EditAnywhere, NoClear)
 	UCapsuleComponent* TriggerCapsule;
 
-	bool bEnabled = true;
+	bool bActive = true;
 };

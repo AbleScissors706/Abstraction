@@ -33,14 +33,14 @@ public:
 
 	//request to open the door
 	UFUNCTION(BlueprintCallable)
-	void DoorOpen();
+	void OnDoorOpen();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//UInteractionComponent
-	/*void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
+	/*UInteractionComponent
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;*/
 
 	void InteractionStart();
@@ -62,6 +62,9 @@ protected:
 	float TimeToRotate = 1.0f;
 
 	float CurrentRotationTime = 0.0f;
+
+	UPROPERTY(EditAnywhere)
+	ATriggerBox* TriggerBox;
 
 	UPROPERTY(EditAnywhere)
 	FRuntimeFloatCurve  OpenCurve;
