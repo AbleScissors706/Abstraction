@@ -8,7 +8,7 @@
 
 // Sets default values
 AAbstractionPlayerCharacter::AAbstractionPlayerCharacter(const FObjectInitializer& ObjectInitializer)
-	//: Super(ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -95,7 +95,7 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 void AAbstractionPlayerCharacter::HandleItemCollected()
 {
 	ItemsCollected++;
-	// Play Effects here.
+	//Play Effects here.
 	//PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
 	PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
 		EDynamicForceFeedbackAction::Start);

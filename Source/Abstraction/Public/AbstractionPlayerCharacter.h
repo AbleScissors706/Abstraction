@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "IDetailTreeNode.h"
+//#include "IDetailTreeNode.h"
 #include "GameFramework/Character.h"
 #include "AbstractionPlayerCharacter.generated.h"
 
@@ -58,7 +58,7 @@ public:
 
 	//this can be an array or moved later as needed
 	UPROPERTY(EditAnywhere)
-	UParticleSystemComponent* ParticleSystemComponent;
+		UParticleSystemComponent* ParticleSystemComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -78,8 +78,8 @@ protected:
 
 	APlayerController* PC;
 
-	//UPROPERTY(EditAnywhere, Category = "Effects")
-	//TSubclassOf<UCameraShake> CamShake;
+	/*UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<UCameraShake> CamShake;*/
 
 	// Force Feedback values.
 	UPROPERTY(EditAnywhere, Category = "Force Feedback")

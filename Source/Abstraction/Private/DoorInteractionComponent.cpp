@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "DoorInteractionComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
@@ -48,6 +47,21 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	DebugDraw();
 }
 
+void UDoorInteractionComponent::OpenDoor()
+{
+	if (IsOpen() || DoorState == EDoorState::DS_Opening)
+	{
+		return;
+	}
+
+	/*if (AudioComponent)
+	{
+		AudioComponent->Play();
+	}*/
+
+	DoorState = EDoorState::DS_Opening;
+	CurrentRotationTime = 0.0f;
+}
 
 void UDoorInteractionComponent::BeginPlay()
 {
@@ -64,9 +78,8 @@ void UDoorInteractionComponent::BeginPlay()
 	//	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
 	//}
 
-	//TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
+	TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
 }
-
 
 void UDoorInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -102,13 +115,9 @@ void UDoorInteractionComponent::OnOverlapEnd(UPrimitiveComponent* OverlappedComp
 	}
 }
 
-void UDoorInteractionComponent::InteractionStart()
+void UDoorInteractionComponent::InteractionRequested()
 {
-	if (InteractingActor)
-	{
-		OnDoorOpen();
-	}
-	/*ideally we would make sure this is allowed*/
+	//ideally we would make sure this is allowed
 	if (InteractingActor)
 	{
 		bActive = false;
@@ -123,8 +132,9 @@ void UDoorInteractionComponent::InteractionStart()
 		{
 			APC->DoorOpenInteractionStarted(GetOwner());
 		}
-	 
-		OpenDoor();
+
+		//this will be called from the owner to be in sync with animation
+		//OpenDoor();
 	}
 }
 
@@ -138,6 +148,10 @@ void UDoorInteractionComponent::OnDoorOpen()
 	{
 		ObjectiveComponent->SetState(EObjectiveState::OS_Completed);
 	}
+
+	//hide prompt
+	//disable interaction
+
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
 	//tell any listeners that the interaction is successful
 	InteractionSuccess.Broadcast();

@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #pragma once
 
 #include "CoreMinimal.h"
@@ -33,23 +32,24 @@ public:
 
 	//request to open the door
 	UFUNCTION(BlueprintCallable)
-	void OnDoorOpen();
+	void OpenDoor();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	/*UInteractionComponent
+	//UInteractionComponent
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
-	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;*/
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
+	void InteractionRequested() override;
 
-	void InteractionStart();
+	//called internally when door has finished opening
+	void OnDoorOpen();
 
 	UFUNCTION(BlueprintCallable)
 	bool IsOpen() { return DoorState == EDoorState::DS_Open; }
 
 	void DebugDraw();
-
 	static void OnDebugToggled(IConsoleVariable* Var);
 
 	UPROPERTY(EditAnywhere)
@@ -64,16 +64,13 @@ protected:
 	float CurrentRotationTime = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerBox* TriggerBox;
-
-	UPROPERTY(EditAnywhere)
 	FRuntimeFloatCurve  OpenCurve;
 
 	UPROPERTY(BlueprintReadOnly)
 	EDoorState DoorState;
 
-	UPROPERTY()
-	UAudioComponent* AudioComponent = nullptr;
+	/*UPROPERTY()
+	UAudioComponent* AudioComponent = nullptr;*/
 	UPROPERTY()
 	UTextRenderComponent* TextRenderComponent = nullptr;
 };
