@@ -9,6 +9,7 @@
 class UObjectiveComponent;
 class UObjectiveHud;
 class UUserWidget;
+
 UCLASS()
 class ABSTRACTION_API UObjectiveWorldSubsystem : public UWorldSubsystem
 {
@@ -29,7 +30,7 @@ public:
 
 	//we call this from maps that we want to display objectives(ie main menu will not call this function)
 	UFUNCTION(BlueprintCallable)
-		void OnMapStart();
+	void OnMapStart();
 
 protected:
 

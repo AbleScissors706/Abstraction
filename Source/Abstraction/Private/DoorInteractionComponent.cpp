@@ -134,7 +134,7 @@ void UDoorInteractionComponent::InteractionRequested()
 		}
 
 		//this will be called from the owner to be in sync with animation
-		//OpenDoor();
+		OpenDoor();
 	}
 }
 

@@ -1,8 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-#pragma once
-
-#include "CoreMinimal.h"
 #pragma once
 
 #include "CoreMinimal.h"
@@ -41,9 +36,10 @@ public:
 	void SetState(EObjectiveState NewState);
 
 protected:
+
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	void InitializeComponent() override;
+	virtual void InitializeComponent() override;
 
 	UPROPERTY(EditAnywhere)
 	FString Description;

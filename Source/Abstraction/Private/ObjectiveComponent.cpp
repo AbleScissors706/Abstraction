@@ -21,7 +21,7 @@ void UObjectiveComponent::SetState(EObjectiveState NewState)
 
 void UObjectiveComponent::InitializeComponent()
 {
-	//Super::InitializeComponent();
+	Super::InitializeComponent();
 	//register
 	UObjectiveWorldSubsystem* ObjectiveWorldSubsystem = GetWorld()->GetSubsystem<UObjectiveWorldSubsystem>();
 	if (ObjectiveWorldSubsystem)
@@ -37,5 +37,5 @@ void UObjectiveComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	{
 		ObjectiveWorldSubsystem->RemoveObjective(this);
 	}
-	//Super::EndPlay(EndPlayReason);
+	Super::EndPlay(EndPlayReason);
 }
