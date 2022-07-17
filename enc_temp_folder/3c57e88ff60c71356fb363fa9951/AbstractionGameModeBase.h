@@ -14,7 +14,6 @@ class ABSTRACTION_API AAbstractionGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-
 	AAbstractionGameModeBase() {}
 
 	UPROPERTY(EditDefaultsOnly)

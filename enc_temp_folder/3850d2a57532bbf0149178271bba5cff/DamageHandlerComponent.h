@@ -1,3 +1,5 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,7 +17,6 @@ class ABSTRACTION_API UDamageHandlerComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-
 	UDamageHandlerComponent(const FObjectInitializer& ObjectInitializer);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -46,4 +47,5 @@ protected:
 
 	/** Holds a critical section object. */
 	FCriticalSection CriticalSection;
+
 };

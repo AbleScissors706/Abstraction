@@ -138,10 +138,9 @@ void UObjectiveWorldSubsystem::OnObjectiveStateChanged(const UObjectiveComponent
 			//GameOver
 			DisplayObjectivesCompleteWidget();
 		}
-		else 
-		{
-			DisplayObjectiveWidget();
-		}		
-		
+		/*else
+		{*/
+		DisplayObjectiveWidget();
+		/*}*/
 	}
 }
