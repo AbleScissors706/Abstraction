@@ -25,6 +25,7 @@ public:
 	void TakeFireDamage(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
 
 protected:
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	

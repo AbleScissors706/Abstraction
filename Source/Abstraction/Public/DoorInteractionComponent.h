@@ -69,8 +69,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	EDoorState DoorState;
 
-	/*UPROPERTY()
-	UAudioComponent* AudioComponent = nullptr;*/
+	UPROPERTY()
+	UAudioComponent* AudioComponent = nullptr;
 	UPROPERTY()
 	UTextRenderComponent* TextRenderComponent = nullptr;
 };

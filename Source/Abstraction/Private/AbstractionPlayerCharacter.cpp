@@ -47,7 +47,12 @@ void AAbstractionPlayerCharacter::SetupPlayerInputComponent(UInputComponent* Pla
 
 void  AAbstractionPlayerCharacter::FellOutOfWorld(const UDamageType& dmgType)
 {
-	OnDeath(true);
+	if (HealthComponent && !HealthComponent->IsDead())
+	{
+		HealthComponent->SetHealth(0.0f);
+		OnDeath(true);
+	}
+	
 }
 
 float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -65,6 +70,24 @@ float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent c
 	return Damage;
 }
 
+const bool AAbstractionPlayerCharacter::IsAlive() const
+{
+	if (HealthComponent)
+	{
+		return !HealthComponent->IsDead();
+	}
+	return false;
+}
+
+const float AAbstractionPlayerCharacter::GetCurrentHealth() const
+{
+	if (HealthComponent)
+	{
+		return !HealthComponent->GetCurrentHealth();
+	}
+	return 0.0f;
+}
+
 void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval)
 {
 	if (DamageHandlerComponent)
@@ -75,11 +98,24 @@ void AAbstractionPlayerCharacter::SetOnFire(float BaseDamage, float DamageTotalT
 
 void AAbstractionPlayerCharacter::OnDeath(bool IsFellOut)
 {
+
+	GetWorld()->GetTimerManager().SetTimer(RestartLevelTimeHandle, this, &AAbstractionPlayerCharacter::OnDeathTimerFinished, TimeRestartLevelAfterDeath, false);
+
+	/*APlayerController* PlayerController = GetController<APlayerController>();
+	if (PlayerController)
+	{
+		PlayerController->RestartLevel();
+	}*/
+}
+
+void AAbstractionPlayerCharacter::OnDeathTimerFinished()
+{
 	APlayerController* PlayerController = GetController<APlayerController>();
 	if (PlayerController)
 	{
 		PlayerController->RestartLevel();
 	}
+
 }
 
 void AAbstractionPlayerCharacter::InteractionStartRequested()
@@ -95,10 +131,10 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 void AAbstractionPlayerCharacter::HandleItemCollected()
 {
 	ItemsCollected++;
-	//Play Effects here.
+	// Play Effects here.
 	//PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
-	PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
-		EDynamicForceFeedbackAction::Start);
+	//PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
+		//EDynamicForceFeedbackAction::Start);
 
 	ItemCollected();
 }

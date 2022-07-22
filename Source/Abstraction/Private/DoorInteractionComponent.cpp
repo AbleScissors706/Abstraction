@@ -54,10 +54,10 @@ void UDoorInteractionComponent::OpenDoor()
 		return;
 	}
 
-	/*if (AudioComponent)
+	if (AudioComponent)
 	{
 		AudioComponent->Play();
-	}*/
+	}
 
 	DoorState = EDoorState::DS_Opening;
 	CurrentRotationTime = 0.0f;
@@ -71,12 +71,12 @@ void UDoorInteractionComponent::BeginPlay()
 	//ensure TimeToRotate is greater than EPSILON
 	CurrentRotationTime = 0.0f;
 
-	//AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
-	////check(AudioComponent);
-	//if (!AudioComponent)
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
-	//}
+	AudioComponent = GetOwner()->FindComponentByClass<UAudioComponent>();
+	//check(AudioComponent);
+	if (!AudioComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UDoorInteractionComponent::BeginPlay() Missing Audio Component"));
+	}
 
 	TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
 }

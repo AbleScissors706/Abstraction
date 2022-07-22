@@ -36,6 +36,12 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	UFUNCTION(BlueprintCallable)
+	const bool IsAlive() const;
+
+	UFUNCTION(BlueprintCallable)
+	const float GetCurrentHealth() const;
+
 	UFUNCTION(BlueprintCallable, Category = "Abstraction")
 	void SetOnFire(float BaseDamage, float DamageTotalTime, float TakeDamageInterval);
 
@@ -58,13 +64,16 @@ public:
 
 	//this can be an array or moved later as needed
 	UPROPERTY(EditAnywhere)
-		UParticleSystemComponent* ParticleSystemComponent;
+	UParticleSystemComponent* ParticleSystemComponent;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void OnDeath(bool IsFellOut);
+
+	UFUNCTION()
+	void OnDeathTimerFinished();
 
 	//Input Bindings
 	void InteractionStartRequested();
@@ -76,15 +85,21 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UDamageHandlerComponent* DamageHandlerComponent;
 
+	UPROPERTY(EditAnywhere)
+	float TimeRestartLevelAfterDeath = 2.0f;
+
+
+	FTimerHandle RestartLevelTimeHandle;
+
 	APlayerController* PC;
 
-	/*UPROPERTY(EditAnywhere, Category = "Effects")
-	TSubclassOf<UCameraShake> CamShake;*/
+	//UPROPERTY(EditAnywhere, Category = "Effects")
+	//	TSubclassOf<UCameraShake> CamShake;
 
-	// Force Feedback values.
-	UPROPERTY(EditAnywhere, Category = "Force Feedback")
-	float ForceFeedbackIntensity = 1.0f;
-	UPROPERTY(EditAnywhere, Category = "Force Feedback")
-	float ForceFeedbackDuration = 1.0f;
+	//// Force Feedback values.
+	//UPROPERTY(EditAnywhere, Category = "Force Feedback")
+	//float ForceFeedbackIntensity = 1.0f;
+	//UPROPERTY(EditAnywhere, Category = "Force Feedback")
+	//float ForceFeedbackDuration = 1.0f;
 
 };
