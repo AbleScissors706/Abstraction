@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "HealthComponent.generated.h"
 
+
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class ABSTRACTION_API UHealthComponent : public UActorComponent
 {
@@ -14,15 +15,11 @@ public:
 	UHealthComponent();
 
 	void TakeDamage(float Damage) { CurrentHealth -= Damage; }
-
 	bool IsDead() { return CurrentHealth <= FLT_EPSILON; }
-
 	const float GetCurrentHealth() const { return CurrentHealth; }
-
-	void SetHealth(float health) { CurrentHealth -= health; }
+	void SetCurrentHealth(float health) { CurrentHealth = health; }
 
 protected:
-
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

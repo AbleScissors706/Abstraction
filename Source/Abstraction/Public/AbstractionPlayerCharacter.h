@@ -88,7 +88,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float TimeRestartLevelAfterDeath = 2.0f;
 
-
 	FTimerHandle RestartLevelTimeHandle;
 
 	APlayerController* PC;

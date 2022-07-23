@@ -49,10 +49,9 @@ void  AAbstractionPlayerCharacter::FellOutOfWorld(const UDamageType& dmgType)
 {
 	if (HealthComponent && !HealthComponent->IsDead())
 	{
-		HealthComponent->SetHealth(0.0f);
+		HealthComponent->SetCurrentHealth(0.0f);
 		OnDeath(true);
-	}
-	
+	}	
 }
 
 float AAbstractionPlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
