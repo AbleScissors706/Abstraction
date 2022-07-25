@@ -130,10 +130,9 @@ void AAbstractionPlayerCharacter::InteractionCancelRequested()
 void AAbstractionPlayerCharacter::HandleItemCollected()
 {
 	ItemsCollected++;
-	// Play Effects here.
-	//PC->PlayerCameraManager->PlayCameraShake(CamShake, 1.0f);
-	//PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,
-		//EDynamicForceFeedbackAction::Start);
+	////Play Effects here.
+	PC->PlayerCameraManager->StartCameraShake(CamShake,1.0f);
+	/*PC->PlayDynamicForceFeedback(ForceFeedbackIntensity, ForceFeedbackDuration, true, false, true, false,EDynamicForceFeedbackAction::Start);*/
 
 	ItemCollected();
 }

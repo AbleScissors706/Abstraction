@@ -92,13 +92,13 @@ protected:
 
 	APlayerController* PC;
 
-	//UPROPERTY(EditAnywhere, Category = "Effects")
-	//	TSubclassOf<UCameraShake> CamShake;
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<UCameraShakeBase> CamShake;
 
-	//// Force Feedback values.
-	//UPROPERTY(EditAnywhere, Category = "Force Feedback")
+	// Force Feedback values.
+	///*UPROPERTY(EditAnywhere, Category = "Force Feedback")
 	//float ForceFeedbackIntensity = 1.0f;
 	//UPROPERTY(EditAnywhere, Category = "Force Feedback")
-	//float ForceFeedbackDuration = 1.0f;
+	//float ForceFeedbackDuration = 1.0f;*/
 
 };
