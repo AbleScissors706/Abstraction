@@ -74,3 +74,5 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 *.fbx
 Content/StarterContent/Maps/Minimal_Default.umap
+Package/Windows/Abstraction/*
+Package/Windows/Engine/*

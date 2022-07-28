@@ -1,6 +1,7 @@
 #include "DoorInteractionComponent.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/PlayerController.h"
+#include "Engine/TriggerBox.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
 #include "DrawDebugHelpers.h"
