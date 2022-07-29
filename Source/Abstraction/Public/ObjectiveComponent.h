@@ -37,9 +37,9 @@ public:
 
 protected:
 
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	void InitializeComponent() override;
 
-	virtual void InitializeComponent() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;	
 
 	UPROPERTY(EditAnywhere)
 	FString Description;

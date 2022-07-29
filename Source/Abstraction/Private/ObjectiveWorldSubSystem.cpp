@@ -4,6 +4,26 @@
 #include "Blueprint/UserWidget.h"
 #include "ObjectiveHud.h"
 
+//void UObjectiveWorldSubsystem::CreateObjectiveWidget(TSubclassOf<UUserWidget> ObjectiveWidgetClass)
+//{
+//	if (ObjectiveWidget == nullptr)
+//	{
+//		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+//		ObjectiveWidget = CreateWidget<UUserWidget>(PlayerController, ObjectiveWidgetClass);
+//	}
+//}
+//
+//void UObjectiveWorldSubsystem::DisplayObjectiveWidget()
+//{
+//	ensureMsgf(ObjectiveWidget, TEXT("UObjectiveWorldSubSystem::DisplayObjectiveWidget ObjectiveWidget is nullptr"));
+//	ObjectiveWidget->AddToViewport();
+//}
+//
+//void UObjectiveWorldSubsystem::ObjectiveCompleted()
+//{
+//	DisplayObjectiveWidget();
+//}
+
 FString UObjectiveWorldSubsystem::GetCurrentObjectiveDescription()
 {
 	if (!Objectives.IsValidIndex(0) || Objectives[0]->GetState() == EObjectiveState::OS_Inactive)
@@ -44,7 +64,7 @@ void UObjectiveWorldSubsystem::OnMapStart()
 	AAbstractionGameModeBase* GameMode = Cast<AAbstractionGameModeBase>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
-		CreateObjectiveWidgets();
+		CreateObjectiveWidget();
 		DisplayObjectiveWidget();
 	}
 }
@@ -57,7 +77,7 @@ void UObjectiveWorldSubsystem::Deinitialize()
 	ObjectivesCompleteWidget = nullptr;
 }
 
-void UObjectiveWorldSubsystem::CreateObjectiveWidgets()
+void UObjectiveWorldSubsystem::CreateObjectiveWidget()
 {
 	if (ObjectiveWidget == nullptr)
 	{
@@ -98,6 +118,8 @@ void UObjectiveWorldSubsystem::DisplayObjectivesCompleteWidget()
 	{
 		ObjectivesCompleteWidget->AddToViewport();
 	}
+
+	ObjectiveWidget->UpdateObjectiveText(GetCompletedObjectiveCount(), Objectives.Num());
 }
 
 void UObjectiveWorldSubsystem::RemoveObjectivesCompleteWidget()
@@ -141,7 +163,6 @@ void UObjectiveWorldSubsystem::OnObjectiveStateChanged(const UObjectiveComponent
 		else 
 		{
 			DisplayObjectiveWidget();
-		}		
-		
+		}			
 	}
 }

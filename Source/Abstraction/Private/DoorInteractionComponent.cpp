@@ -35,16 +35,21 @@ void UDoorInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	if (DoorState == EDoorState::DS_Opening)
 	{
 		CurrentRotationTime += DeltaTime;
-		const float TimeRatio = FMath::Clamp(CurrentRotationTime / TimeToRotate, 0.0f, 1.0f);
-		const float RotationAlpha = OpenCurve.GetRichCurveConst()->Eval(TimeRatio);
-		const FRotator CurrentRotation = FMath::Lerp(StartRotation, FinalRotation, RotationAlpha);
-		GetOwner()->SetActorRotation(CurrentRotation);
+		float TimeRatio = UpdateDoorRotation();
 		if (TimeRatio >= 1.0f)
 		{
 			OnDoorOpen();
 		}
 	}
-
+	if (DoorState == EDoorState::DS_Closing)
+	{
+		CurrentRotationTime -= DeltaTime;
+		float TimeRatio = UpdateDoorRotation();
+		if (TimeRatio <= 0.0f)
+		{
+			OnDoorClosed();
+		}
+	}
 	DebugDraw();
 }
 
@@ -80,6 +85,16 @@ void UDoorInteractionComponent::BeginPlay()
 	}
 
 	TextRenderComponent = GetOwner()->FindComponentByClass<UTextRenderComponent>();
+}
+
+float UDoorInteractionComponent::UpdateDoorRotation()
+{
+	const float TimeRatio = FMath::Clamp(CurrentRotationTime / TimeToRotate, 0.0f, 1.0f);
+	const float RotationAlpha = OpenCurve.GetRichCurveConst()->Eval(TimeRatio);
+	const FRotator CurrentRotation = FMath::Lerp(StartRotation, FinalRotation, RotationAlpha);
+	GetOwner()->SetActorRotation(CurrentRotation);
+
+	return TimeRatio;
 }
 
 void UDoorInteractionComponent::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -156,6 +171,13 @@ void UDoorInteractionComponent::OnDoorOpen()
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("DoorOpened"));
 	//tell any listeners that the interaction is successful
 	InteractionSuccess.Broadcast();
+}
+
+void UDoorInteractionComponent::OnDoorClosed()
+{
+	DoorState = EDoorState::DS_Closing;
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Yellow, TEXT("DoorClosed"));
+
 }
 
 void UDoorInteractionComponent::OnDebugToggled(IConsoleVariable* Var)

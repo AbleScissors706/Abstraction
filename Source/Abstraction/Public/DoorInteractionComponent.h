@@ -18,6 +18,7 @@ enum class EDoorState
 	DS_Opening = 1	UMETA(DisplayName = "Opening"),
 	DS_Open = 2		UMETA(DisplayName = "Open"),
 	DS_Locked = 3	UMETA(DisplayName = "Locked"),
+	DS_Closing = 4	UMETA(DisplayNAme = "Closing")
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -38,6 +39,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	float UpdateDoorRotation();
+
 	//UInteractionComponent
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
@@ -45,6 +48,8 @@ protected:
 
 	//called internally when door has finished opening
 	void OnDoorOpen();
+
+	void OnDoorClosed();
 
 	UFUNCTION(BlueprintCallable)
 	bool IsOpen() { return DoorState == EDoorState::DS_Open; }
