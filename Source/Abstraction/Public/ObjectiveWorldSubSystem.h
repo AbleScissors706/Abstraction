@@ -28,9 +28,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RemoveObjective(UObjectiveComponent* ObjectiveComponent);
-
-	void OnObjectiveStateChanged(const UObjectiveComponent* ObjectiveComponent, EObjectiveState ObjectiveState);
-
+	
 	//we call this from maps that we want to display objectives(ie main menu will not call this function)
 	UFUNCTION(BlueprintCallable)
 	void OnMapStart();
@@ -48,8 +46,8 @@ protected:
 	virtual void Deinitialize() override;
 
 	void CreateObjectiveWidget();
+	
 	void DisplayObjectiveWidget();
-
 	void RemoveObjectiveWidget();
 
 	void DisplayObjectivesCompleteWidget();
@@ -57,7 +55,7 @@ protected:
 
 	uint32 GetCompletedObjectiveCount();
 
-	//void OnObjectiveStateChanged(const UObjectiveComponent* ObjectiveComponent, EObjectiveState ObjectiveState);
+	void OnObjectiveStateChanged(const UObjectiveComponent* ObjectiveComponent, EObjectiveState ObjectiveState);
 
 private:	
 

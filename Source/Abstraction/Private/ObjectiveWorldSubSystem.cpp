@@ -55,7 +55,7 @@ void UObjectiveWorldSubsystem::AddObjective(UObjectiveComponent* ObjectiveCompon
 void UObjectiveWorldSubsystem::RemoveObjective(UObjectiveComponent* ObjectiveComponent)
 {
 	int32 numRemoved = ObjectiveComponent->OnStateChanged.RemoveAll(this);
-	check(numRemoved);
+	ensure(numRemoved);
 	Objectives.Remove(ObjectiveComponent);
 }
 

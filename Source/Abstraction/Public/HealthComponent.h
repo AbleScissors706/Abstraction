@@ -15,8 +15,8 @@ public:
 	UHealthComponent();
 
 	void TakeDamage(float Damage) { CurrentHealth -= Damage; }
-	bool IsDead() { return CurrentHealth <= FLT_EPSILON; }
-	const float GetCurrentHealth() const { return CurrentHealth; }
+	bool IsDead() const { return CurrentHealth <= FLT_EPSILON; }
+	const float GetCurrentHealth() { return CurrentHealth; }
 	void SetCurrentHealth(float health) { CurrentHealth = health; }
 
 protected:
