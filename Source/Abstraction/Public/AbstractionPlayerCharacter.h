@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-//#include "IDetailTreeNode.h"
+#include "IDetailTreeNode.h"
 #include "GameFramework/Character.h"
 #include "AbstractionPlayerCharacter.generated.h"
 
